@@ -1,15 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Button from "../components/Button";
+import { useDispatch, useSelector } from "react-redux";
 
 function DisconnectedPage() {
   const navigate = useNavigate();
-  const dispacth = useDispa
+  const dispatch = useDispatch();
 
   const handleSummary = () => {
+    // dispatch();
     navigate('/summary')
   }
 
