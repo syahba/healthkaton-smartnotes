@@ -10,7 +10,6 @@ const stepSummary = new Schema(
     isCompleted: {
       type: Boolean,
       default: false,
-      required: true,
     },
     summary: {
       type: Schema.ObjectId,

@@ -7,14 +7,17 @@ const summarySchema = new Schema(
       type: String,
       required: true,
     },
-    cs: {
+    csName: {
       type: String,
-      required: true,
+      default: 'CS'
+    },
+    customerName: {
+      type: String,
+      default: 'Pengguna',
     },
     isFinished: {
       type: Boolean,
       default: false,
-      required: true,
     },
     summary: {
       type: String,
@@ -24,6 +27,10 @@ const summarySchema = new Schema(
       type: Schema.ObjectId,
       ref: "steps",
     },
+    progress: {
+      type: Number,
+      default: 0
+    }
   },
   {
     timestamps: true,
