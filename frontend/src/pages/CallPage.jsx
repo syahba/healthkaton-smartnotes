@@ -67,7 +67,7 @@ function CallPage() {
           </div>
         </div>
 
-        <button onClick={() => navigate('/call/disconnect')} className="text-white bg-[#EA364C] px-3 py-4 rounded-full shadow-2xl cursor-pointer hover:bg-white hover:outline-3 hover:outline-[#EA364C] hover:text-[#EA364C] transition-all duration-300">
+        <button onClick={() => navigate('/call/disconnect')} className="text-white bg-[#EA364C] px-3 py-4 rounded-full shadow-2xl cursor-pointer hover:scale-105 transition-all duration-300">
           <FontAwesomeIcon
             icon={faPhone}
             transform={{ rotate: 132 }}

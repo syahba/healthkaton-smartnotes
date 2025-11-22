@@ -6,11 +6,13 @@
   --primary: #4C9FF3;
   --primary-lighter: #c2edff;
   --neutral: #1A1A1A;
-  --disabled: #808080;
+  --disabled: #9d9d9d;
 
   /* font style */
   --heading: 1.5rem;
   --paragraph: 1rem;
+  --caption: 0.75rem;
+  --label: 1.10rem;
   --family: "Nunito", sans-serif;
 }
 
@@ -29,5 +31,12 @@ html {
 
 .paragraph {
   font-size: var(--paragraph);
-  font-weight: 400;
+}
+
+.caption {
+  font-size: var(--caption);
+}
+
+.label {
+  font-size: var(--label);
 }

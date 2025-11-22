@@ -13,7 +13,7 @@ function App() {
         <Route path="/call" element={<CallPage></CallPage>}></Route>
         <Route path="/call/disconnect" element={<DisconnectedPage></DisconnectedPage>}></Route>
         <Route path="/summary" element={<SummaryListPage></SummaryListPage>}></Route>
-        <Route path="/summary/details" element={<SummaryDetailPage></SummaryDetailPage>}></Route>
+        <Route path="/summary/:id" element={<SummaryDetailPage></SummaryDetailPage>}></Route>
       </Routes>
     </BrowserRouter>
   )
