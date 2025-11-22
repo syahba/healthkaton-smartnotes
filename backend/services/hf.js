@@ -1,21 +1,19 @@
 const fs = require("fs");
 const fetch = require("node-fetch");
-const dayjs = require("dayjs");
 
 const HF_API = process.env.HF_API_KEY;
-const TRANSCRIBE_MODEL =
-  process.env.HF_TRANSCRIBE_MODEL;
+const TRANSCRIBE_MODEL = process.env.HF_TRANSCRIBE_MODEL;
 const SUMMARIZE_MODEL = process.env.HF_SUMMARIZE_MODEL;
 
 if (!HF_API) {
   console.warn("HF_API_KEY not set. HF calls will fail if used.");
 }
 
-async function transcribeAudio(filePath, lang = "id") {
+const transcribeAudio = async (filePath, lang = "id") => {
   const buffer = fs.readFileSync(filePath);
 
   const res = await fetch(
-    `https://api-inference.huggingface.co/models/${TRANSCRIBE_MODEL}`,
+    `https://router.huggingface.co/fal-ai/fal-ai/whisper`,
     {
       method: "POST",
       headers: {
@@ -25,24 +23,22 @@ async function transcribeAudio(filePath, lang = "id") {
       body: buffer,
     }
   );
-
+console.log('this is it', res)
+  
   if (!res.ok) {
     const txt = await res.text();
     throw new Error(`Transcription failed: ${res.status} ${txt}`);
   }
-
+  
   const data = await res.json();
-  const transcript =
-    data?.text ?? (typeof data === "string" ? data : JSON.stringify(data));
-  return transcript.trim();
+  console.log('test', data);
+  // const transcript =
+  //   data?.text ?? (typeof data === "string" ? data : JSON.stringify(data));
+  // return transcript.trim();
 }
 
 // create summary
-async function generateNoteFromTranscript(
-  transcript,
-  { csFallback = "CS", userFallback = "Pengguna" } = {}
-) {
-  const now = dayjs().format("YYYY-MM-DD HH:mm");
+const generateNoteFromTranscript = async (transcript) => {
   const prompt = `
   You are an assistant that summarizes customer service voice calls for MJKN (BPJS Kesehatan).
   Input: a raw call transcript in Bahasa Indonesia.
@@ -52,14 +48,14 @@ async function generateNoteFromTranscript(
     "topic": "<one-sentence topic, short & keyword rich>",
     "csName": "<customer service name if found, otherwise fallback>",
     "summary": "<one paragraph summary in simple Bahasa Indonesia>",
-    "nextSteps": ["step 1", "step 2", ...]   // 3-6 steps, each short and actionable in Bahasa Indonesia
+    "steps": ["step 1", "step 2", ...]   // 3-6 steps, each short and actionable in Bahasa Indonesia
   }
 
   Rules:
     - Return ONLY valid JSON and nothing else.
     - Keep 'topic' short (max ~12 words), include key terms.
     - 'summary' must be a clear paragraph that anyone can understand.
-    - 'nextSteps' must be 3-6 steps, each concise and actionable (e.g., "Buka menu Pembayaran", "Pilih ...").
+    - 'steps' must be 3-6 steps, each concise and actionable (e.g., "Buka menu Pembayaran", "Pilih ...").
     - Use fallback values when the name is not found.
 
   Transcript:
@@ -107,15 +103,13 @@ async function generateNoteFromTranscript(
   const parsed = JSON.parse(jsonMatch[0]);
 
   const topic = parsed.topic?.trim?.() ?? "";
-  const dateTime = parsed.dateTime ?? dayjs().format("YYYY-MM-DD HH:mm");
-  const csName = parsed.csName?.trim?.() ?? csFallback;
-  const userName = parsed.userName?.trim?.() ?? userFallback;
+  const csName = parsed.csName?.trim?.() ?? 'CS';
   const summary = parsed.summary?.trim?.() ?? "";
-  const nextSteps = Array.isArray(parsed.nextSteps)
-    ? parsed.nextSteps.map((s) => String(s).trim())
+  const steps = Array.isArray(parsed.steps)
+    ? parsed.steps.map((s) => String(s).trim())
     : [];
 
-  return { topic, dateTime, csName, userName, summary, nextSteps };
+  return { topic, csName, summary, steps };
 }
 
 module.exports = { transcribeAudio, generateNoteFromTranscript };
