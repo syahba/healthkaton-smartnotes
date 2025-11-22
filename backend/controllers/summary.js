@@ -74,14 +74,22 @@ const getSummary = async (req, res) => {
 const getDetailSummary = async (req, res) => {
   try {
     const { id: summaryId } = req.params;
-    if (!summaryId)
+    if (!summaryId) {
       return res.status(400).json({ message: "Summary ID is required." });
+    }
 
-    const data = await Summary.findById(summaryId);
+    const data = await Summary.findById(summaryId).populate('steps');
+
+    if (!data) {
+      return res.status(404).json({ message: "Summary not found." });
+    }
 
     res.status(200).send(data);
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching detailed summary:", err);
+    if (err.name === 'CastError') {
+      return res.status(400).json({ message: "Invalid Summary ID format." });
+    }
     res.status(500).json({ message: err.message });
   }
 };

@@ -3,7 +3,12 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-const { processCallSummary, getSummary, getDetailSummary, updateStepStatus } = require("../controllers/summary");
+const {
+  processCallSummary,
+  getSummary,
+  getDetailSummary,
+  updateStepStatus,
+} = require("../controllers/summary");
 
 const uploadDir = process.env.UPLOAD_DIR || "./uploads";
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
@@ -24,6 +29,6 @@ const upload = multer({ storage });
 router.get("/", getSummary);
 router.get("/:id", getDetailSummary);
 router.post("/", upload.single("audio"), processCallSummary);
-router.post('/:id', updateStepStatus)
+router.post("/:id", updateStepStatus);
 
 module.exports = router;
