@@ -1,0 +1,24 @@
+{
+  "speakers": [
+    {
+      "speaker": "CS",
+      "text": "Halo, dengan customer service bpjs, saya shabad m. sri bantu."
+    },
+    {
+      "speaker": "User",
+      "text": "Saya bisa minta tolong gimana caranya buat daftar ya."
+    },
+    {
+      "speaker": "CS",
+      "text": "Untuk daftar, ibu bisa membuka menu pendaftaran, lalu ibu bisa mengisir data-data ibu di situ. nanti ibu akan mendapatkan otp, setelah itu ibu bisa mengaktifkan dapjs-nya."
+    },
+    {
+      "speaker": "CS",
+      "text": "Baik-"
+    },
+    {
+      "speaker": "CS",
+      "text": "Terima kasih. baik."
+    }
+  ]
+}

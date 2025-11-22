@@ -13,10 +13,8 @@ const processCallSummary = async (req, res) => {
         .status(400)
         .json({ message: "audio file required (form field name: audio)" });
 
-    const { path: filePath } = file;
-    const transcript = await transcribeAudio(filePath, "id");
-    console.log(transcript);
-    
+    const { filename: fileName, path: filePath } = file;
+    const transcript = await transcribeAudio(fileName, "id");
     const note = await generateNoteFromTranscript(transcript);
 
     const doc = {

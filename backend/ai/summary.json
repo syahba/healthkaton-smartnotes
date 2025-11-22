@@ -1,0 +1,12 @@
+{
+"topic": "Pendaftaran BPJS",
+"csName": "Shabad M. Sri",
+"summary": "Customer ingin tahu cara mendaftar BPJS. CS menjelaskan langkah-langkah pendaftaran, yaitu membuka menu pendaftaran, mengisi data diri, menunggu OTP, dan mengaktifkan BPJS setelah menerima OTP. CS mengakhiri percakapan dengan ucapan terima kasih.",
+"steps": [
+"Buka menu pendaftaran pada aplikasi atau website BPJS.",
+"Isi data diri dengan lengkap dan akurat sesuai yang diminta.",
+"Tunggu OTP (One Time Password) yang akan dikirim ke nomor telepon yang terdaftar.",
+"Masukkan OTP yang diterima untuk melanjutkan proses aktivasi.",
+"Ikuti instruksi selanjutnya untuk menyelesaikan pendaftaran BPJS."
+]
+}

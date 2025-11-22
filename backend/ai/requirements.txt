@@ -1,0 +1,7 @@
+transformers
+torch
+librosa
+soundfile
+ffmpeg-python
+sentencepiece
+protobuf
