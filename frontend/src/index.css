@@ -1,11 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 @import "tailwindcss";
 
 :root {
   /* color palette */
+  --primary: #4C9FF3;
+  --primary-lighter: #c2edff;
+  --neutral: #1A1A1A;
+  --disabled: #808080;
 
   /* font style */
+  --heading: 1.5rem;
+  --paragraph: 1rem;
+  --family: "Nunito", sans-serif;
+}
+
+* {
+  font-family: var(--family);
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+.heading {
+  font-size: var(--heading);
+  font-weight: 700;
+}
+
+.paragraph {
+  font-size: var(--paragraph);
+  font-weight: 400;
 }
