@@ -1,33 +1,26 @@
 const Summary = require("../models/summaries");
 const fs = require("fs");
-const {
-  transcribeAudio,
-  generateNoteFromTranscript,
-} = require("../services/hf");
+const { processAudio } = require("../services/hf");
+const { formatDate } = require("../helpers/formatDate");
 
 const processCallSummary = async (req, res) => {
   try {
-    const { body: { customerName }, file } = req;
-    if (!file)
-      return res
-        .status(400)
-        .json({ message: "audio file required (form field name: audio)" });
+    const { customerName } = req.body;
+    const { filename: fileName, path: filePath } = req.file;
 
-    const { filename: fileName, path: filePath } = file;
-    const transcript = await transcribeAudio(fileName, "id");
-    const note = await generateNoteFromTranscript(transcript);
-
+    const note = await processAudio(fileName);
+    console.log(note)
+    
     const doc = {
       customerName,
-      csName: note.csName,
-      datetime: new Date().format("YYYY-MM-DD HH:mm"),
-      topic: note.topic,
-      summary: note.summary,
-      steps: note.steps,
+      csName: note.csName || "CS",
+      datetime: formatDate(new Date()),
+      topic: note.topic || "",
+      summary: note.summary || "",
+      steps: note.steps || [],
     };
 
     fs.unlink(filePath, () => {});
-
     res.status(201).json(doc);
   } catch (err) {
     console.error(err);
@@ -44,7 +37,7 @@ const getSummary = async (req, res) => {
     console.error(err);
     res.status(500).json({ message: err.message });
   }
-}
+};
 
 const getDetailSummary = async (req, res) => {
   try {
@@ -56,10 +49,10 @@ const getDetailSummary = async (req, res) => {
     console.error(err);
     res.status(500).json({ message: err.message });
   }
-}
+};
 
 module.exports = {
   processCallSummary,
   getSummary,
-  getDetailSummary
+  getDetailSummary,
 };

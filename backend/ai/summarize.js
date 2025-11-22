@@ -3,6 +3,7 @@ require("dotenv").config({
 });
 const fetch = require("node-fetch");
 const fs = require("fs");
+const path = require("path");
 const token = process.env.HF_TOKEN;
 
 async function summarize(structuredPath) {
@@ -11,27 +12,25 @@ async function summarize(structuredPath) {
     .map((s) => `${s.speaker}: ${s.text}`)
     .join("\n");
 
-  console.log("Transcript loaded:", transcript);
-
   const messages = [
     {
       role: "system",
       content: `
-      Kamu merangkum percakapan customer service dalam **JSON murni**.
+        Kamu merangkum percakapan customer service dalam **JSON murni**.
 
-      Format WAJIB:
-      {
-        "topic": "",
-        "csName": "",
-        "summary": "",
-        "steps": []
-      }
+        Format WAJIB:
+        {
+          "topic": "",
+          "csName": "",
+          "summary": "",
+          "steps": []
+        }
 
-      Aturan:
-      - Jawab HANYA JSON, tanpa \`\`\`, tanpa teks tambahan
-      - 'summary' minimal 2 kalimat, maksimal 4 kalimat
-      - 'steps' harus instruksi yang bisa diikuti
-      - 'steps' minimal ada 3 langkah, maksimal ada 6 langkah
+        Aturan:
+        - Jawab HANYA JSON, tanpa \`\`\`, tanpa teks tambahan
+        - 'summary' minimal 2 kalimat, maksimal 4 kalimat
+        - 'steps' harus instruksi yang bisa diikuti
+        - 'steps' minimal ada 3 langkah, maksimal ada 6 langkah
       `,
     },
     {
@@ -47,7 +46,7 @@ async function summarize(structuredPath) {
     temperature: 0.2,
   };
 
-  console.log("\n📌 Sending request body:", JSON.stringify(body, null, 2));
+  console.log("Sending request body:", JSON.stringify(body, null, 2));
 
   const response = await fetch(
     "https://router.huggingface.co/v1/chat/completions",
@@ -62,19 +61,20 @@ async function summarize(structuredPath) {
   );
 
   const result = await response.json();
-  console.log("\n📌 Raw Response:", JSON.stringify(result, null, 2));
 
   if (!result?.choices?.length) {
-    console.error("\n❌ ERROR: No choices returned!");
+    console.error("ERROR: No choices returned!");
     return;
   }
 
   const output = result.choices[0].message.content.trim();
-  console.log("\n=== OUTPUT CONTENT ===");
-  console.log(output);
 
-  fs.writeFileSync("summary.json", output);
-  console.log("\n✔ Saved to summary.json");
+  const outputPath = path.join(__dirname, "summary.json");
+
+  fs.writeFileSync(outputPath, output);
+
+  console.log(`Successfully saved summary to ${outputPath}`);
+  return JSON.parse(output);
 }
 
-summarize("structured.json");
+module.exports = { summarize };

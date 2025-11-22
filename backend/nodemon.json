@@ -1,0 +1,9 @@
+{
+  "verbose": true,
+  "ignore": [
+    "**/transcript.json",
+    "**/structured.json",
+    "**/uploads/**",
+    "**/*.log"
+  ]
+}
