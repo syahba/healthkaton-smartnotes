@@ -4,10 +4,21 @@ import Header from "../components/Header";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchSummaries } from "../redux/summarySlice";
 
 function SummaryListPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const { loading, error, summaryList } = useSelector((state) => state.summary);
+
+  useEffect(() => {
+    dispatch(fetchSummaries())
+  }, [summaryList]);
+
+  console.log(summaryList, loading);
   return (
     <div className="h-full flex flex-col">
       <Header text={"List Ringkasan"}></Header>
@@ -17,7 +28,7 @@ function SummaryListPage() {
           Ringkasan Panggilan CS
         </h1>
 
-        <div className="relative">
+        {/* <div className="relative">
           <input
             type="text"
             placeholder="Cari berdasarkan topic"
@@ -27,9 +38,10 @@ function SummaryListPage() {
             icon={faMagnifyingGlass}
             className="absolute left-2 top-2.5 text-[#a7a7a7]"
           />
-        </div>
+        </div> */}
 
-        <div className="flex flex-col justify-evenly items-center h-full hidden">
+        
+        <div className={`flex flex-col justify-evenly items-center h-full hidden `}>
           <div className="flex flex-col justify-center items-center gap-4">
             <FontAwesomeIcon
               icon={faPhone}
@@ -51,8 +63,10 @@ function SummaryListPage() {
           ></Button>
         </div>
 
-        <div>
-          <Card></Card>
+        <div className="flex flex-col gap-4">
+          {summaryList.map(v => (
+            <Card data={v}></Card>
+          ))}
         </div>
       </div>
     </div>

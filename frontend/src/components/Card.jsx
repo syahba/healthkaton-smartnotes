@@ -2,38 +2,35 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faHeadset, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import Button from "./Button";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function Card({ data, isDetail }) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleSummary = () => {
-    // dispatch();
-    navigate("/summary/1");
+    navigate(`/summary/${data._id}`);
   };
 
   return (
     <div className={`bg-white shadow-lg rounded-xl w-80 p-3 ${isDetail && 'absolute top-18 left-8'}`}>
       <div className={`flex justify-between items-start ${isDetail ? 'mb-5' : 'mb-1'}`}>
         <p className="label text-[var(--neutral)] font-bold max-w-44">
-          Cara reaktivasi BPJS
+          {data.topic}
         </p>
-        <p className="caption text-[var(--disabled)]">10 Nov 2025, 14:25</p>
+        <p className="caption text-[var(--disabled)]">{data.datetime}</p>
       </div>
 
       <div className={isDetail ? 'flex justify-between items-end' : 'flex flex-col gap-4'}>
         <div className="text-[var(--neutral)]">
           <div className="flex items-center gap-1">
             <FontAwesomeIcon icon={faHeadset} />
-            <p className="paragraph">Erland</p>
+            <p className="paragraph">{data.csName}</p>
           </div>
 
           {isDetail && (
             <div className="flex items-center gap-1">
               <FontAwesomeIcon icon={faUser} />
-              <p className="paragraph">Morrissey</p>
+              <p className="paragraph">{data.customerName}</p>
             </div>
           )}
         </div>
@@ -43,10 +40,10 @@ function Card({ data, isDetail }) {
             isDetail ? "justify-end" : "justify-between"
           }`}
         >
-          <div className="text-[var(--neutral)] flex items-center gap-1">
+          {data.isFinished && (<div className="text-[var(--neutral)] flex items-center gap-1">
             <FontAwesomeIcon icon={faCircleCheck} className="text-[#1EAD2E]" />
             <p className="paragraph">Selesai</p>
-          </div>
+          </div>)}
 
           <div className={isDetail ? "hidden" : ""}>
             <Button

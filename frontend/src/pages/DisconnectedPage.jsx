@@ -3,14 +3,11 @@ import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Button from "../components/Button";
-import { useDispatch, useSelector } from "react-redux";
 
 function DisconnectedPage() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleSummary = () => {
-    // dispatch();
     navigate('/summary')
   }
 
