@@ -11,7 +11,7 @@ const stepSummary = new Schema(
       type: Boolean,
       default: false,
     },
-    summary: {
+    summaryId: {
       type: Schema.ObjectId,
       ref: "summaries",
     },

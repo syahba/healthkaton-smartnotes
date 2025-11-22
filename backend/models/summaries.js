@@ -23,10 +23,10 @@ const summarySchema = new Schema(
       type: String,
       required: true,
     },
-    steps: {
+    steps: [{
       type: Schema.ObjectId,
       ref: "steps",
-    },
+    }],
     progress: {
       type: Number,
       default: 0
