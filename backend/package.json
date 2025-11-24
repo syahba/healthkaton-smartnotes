@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon --ignore '*.json' --ignore 'uploads/*' index.js"
   },
   "dependencies": {
     "child_process": "^1.0.2",

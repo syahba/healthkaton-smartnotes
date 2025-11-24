@@ -2,13 +2,35 @@ from transformers import pipeline
 import sys
 import json
 import os
+import re
 
 asr = pipeline("automatic-speech-recognition", model="openai/whisper-small")
+
+def correct_special_terms(text):
+    if not text:
+        return text
+    
+    corrected = text
+
+    patterns = [
+        r"\b[bv]p[ij1]s\b",
+        r"\b[bv]p\s?[ij1]\s?s\b",
+        r"\bgpjs\b",
+    ]
+
+    for pattern in patterns:
+        corrected = re.sub(pattern, "BPJS", corrected, flags=re.IGNORECASE)
+
+    return corrected
 
 def transcribe(audio_path):
     print(f"Transcribing: {audio_path}", flush=True)
     result = asr(audio_path)
-    return result.get("text", "")
+    
+    text = result.get("text", "")
+    text = correct_special_terms(text)
+    
+    return text
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -26,4 +48,3 @@ if __name__ == "__main__":
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     print(f"[SUCCESS] Saved transcript to {output_path}")
-    print(transcript)

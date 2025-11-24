@@ -1,24 +1,16 @@
 {
   "speakers": [
     {
-      "speaker": "CS",
-      "text": "Halo, dengan customer service bpjs, saya shabad m. sri bantu."
+      "speaker": "User",
+      "text": "Selamat siang, bbjs kesehatan. ada yang bisa saya bantu? saya mau tanya, kartu jkn saya hilang. jarang urusnya gimana ya?"
     },
     {
       "speaker": "User",
-      "text": "Saya bisa minta tolong gimana caranya buat daftar ya."
+      "text": "Untuk kartu hilang, kakak bisa kata pulang melalui mobil jkn atau datang ke kater bbjs terdekat?"
     },
     {
-      "speaker": "CS",
-      "text": "Untuk daftar, ibu bisa membuka menu pendaftaran, lalu ibu bisa mengisir data-data ibu di situ. nanti ibu akan mendapatkan otp, setelah itu ibu bisa mengaktifkan dapjs-nya."
-    },
-    {
-      "speaker": "CS",
-      "text": "Baik-"
-    },
-    {
-      "speaker": "CS",
-      "text": "Terima kasih. baik."
+      "speaker": "User",
+      "text": "Terima kasih info-nya."
     }
   ]
 }

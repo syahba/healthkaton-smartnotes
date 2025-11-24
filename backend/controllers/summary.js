@@ -1,33 +1,16 @@
 const Summary = require("../models/summaries");
 const fs = require("fs");
 const { processAudio } = require("../services/hf");
-const { formatDate } = require("../helpers/formatDate");
 const Step = require("../models/steps");
 
 const processCallSummary = async (req, res) => {
   try {
-    const { customerName } = req.body;
     const { filename: fileName, path: filePath } = req.file;
 
-    // const data = await processAudio(fileName);
-
-    const data = {
-      customerName: "syahba",
-      csName: "Shabad M. Sri",
-      datetime: "22 Nov 2025, 20:11",
-      topic: "Pendaftaran BPJS",
-      summary:
-        "Customer ingin tahu cara mendaftar BPJS. CS menjelaskan langkah-langkah pendaftaran, yaitu membuka menu pendaftaran, mengisi data diri, menunggu OTP, dan mengaktifkan BPJS.",
-      steps: [
-        "Buka menu pendaftaran pada aplikasi atau website BPJS.",
-        "Isi data diri dengan lengkap dan akurat sesuai yang diminta.",
-        "Tunggu OTP (One Time Password) yang akan dikirim ke nomor telepon yang terdaftar.",
-        "Masukkan OTP yang diterima untuk mengaktifkan akun BPJS.",
-      ],
-    };
+    const data = await processAudio(fileName);
 
     const summary = await Summary.create({
-      customerName,
+      customerName: "Morrissey",
       csName: data.csName || "CS",
       topic: data.topic || "",
       summary: data.summary || "",
@@ -39,7 +22,8 @@ const processCallSummary = async (req, res) => {
       summaryId,
     }));
 
-    const steps = await Step.create(stepsArr);
+    await Step.create(stepsArr);
+    const steps = await Step.find({ summaryId });
 
     const stepIds = steps.map((step) => step._id);
 
@@ -62,7 +46,7 @@ const processCallSummary = async (req, res) => {
 
 const getSummary = async (req, res) => {
   try {
-    const data = await Summary.find();
+    const data = await Summary.find().sort({ createdAt: -1 });
 
     res.status(200).send(data);
   } catch (err) {
@@ -78,7 +62,7 @@ const getDetailSummary = async (req, res) => {
       return res.status(400).json({ message: "Summary ID is required." });
     }
 
-    const data = await Summary.findById(summaryId).populate('steps');
+    const data = await Summary.findById(summaryId).populate("steps");
 
     if (!data) {
       return res.status(404).json({ message: "Summary not found." });
@@ -87,7 +71,7 @@ const getDetailSummary = async (req, res) => {
     res.status(200).send(data);
   } catch (err) {
     console.error("Error fetching detailed summary:", err);
-    if (err.name === 'CastError') {
+    if (err.name === "CastError") {
       return res.status(400).json({ message: "Invalid Summary ID format." });
     }
     res.status(500).json({ message: err.message });

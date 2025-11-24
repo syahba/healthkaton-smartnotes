@@ -1,11 +1,11 @@
 {
-  "topic": "Pendaftaran BPJS",
-  "csName": "Shabad M. Sri",
-  "summary": "Customer ingin tahu cara mendaftar BPJS. CS menjelaskan langkah-langkah pendaftaran, yaitu membuka menu pendaftaran, mengisi data diri, menunggu OTP, dan mengaktifkan BPJS.",
+  "topic": "Kartu JKN Hilang",
+  "csName": "bbjs kesehatan",
+  "summary": "Pelanggan menghubungi layanan customer service untuk menanyakan prosedur penggantian kartu JKN yang hilang. Pelanggan jarang mengurus kartu JKN. Customer service menjelaskan dua opsi: mengurus melalui aplikasi mobile JKN atau datang ke kantor BPJS terdekat.",
   "steps": [
-    "Buka menu pendaftaran pada aplikasi atau website BPJS.",
-    "Isi data diri dengan lengkap dan akurat sesuai yang diminta.",
-    "Tunggu OTP (One Time Password) yang akan dikirim ke nomor telepon yang terdaftar.",
-    "Masukkan OTP yang diterima untuk mengaktifkan akun BPJS."
+    "Unduh dan buka aplikasi mobile JKN.",
+    "Pilih menu 'Kartu JKN' atau 'Penggantian Kartu'.",
+    "Ikuti panduan dalam aplikasi untuk melaporkan kartu hilang dan mengajukan penggantian.",
+    "Jika tidak memiliki aplikasi, kunjungi kantor BPJS Kesehatan terdekat."
   ]
 }

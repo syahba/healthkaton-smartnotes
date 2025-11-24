@@ -1,9 +1,13 @@
 {
-  "verbose": true,
+  "watch": [
+    "src",
+    "app.js"
+  ],
   "ignore": [
-    "**/transcript.json",
-    "**/structured.json",
+    "ai/**",
     "**/uploads/**",
+    "**/*.json",
     "**/*.log"
-  ]
+  ],
+  "ext": "js,json"
 }
