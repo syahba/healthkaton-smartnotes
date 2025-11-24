@@ -20,7 +20,7 @@ function CallPage() {
 
   const { loading, error } = useSelector((state) => state.summary);
 
-  const [callState, setCallState] = useState(CALL_STATE.CONNECTING);
+  const [callState, setCallState] = useState(CALL_STATE.INITIALIZING);
   const [duration, setDuration] = useState(0);
   const [timer, setTimer] = useState("00:00");
   const [mimeType, setMimeType] = useState("audio/webm");
@@ -53,13 +53,12 @@ function CallPage() {
       const summaryData = await dispatch(uploadSummary(audioBlob));
 
       if (summaryData && summaryData._id) {
-          navigate(`/summary/${summaryData._id}`);
-          setCallState(CALL_STATE.DONE);
+        navigate(`/summary/${summaryData._id}`);
+        setCallState(CALL_STATE.DONE);
       } else if (error) {
-          // If Redux state shows an error
-          setCallState(CALL_STATE.ERROR);
+        setCallState(CALL_STATE.ERROR);
       } else {
-          throw new Error("Upload succeeded, but no summary ID returned.");
+        throw new Error("Upload succeeded, but no summary ID returned.");
       }
     } catch (error) {
       console.error("Failed to upload audio or process summary:", error);
@@ -69,9 +68,8 @@ function CallPage() {
 
   const onRecordingStopped = useCallback(() => {
     if (!mediaRecorderRef.current) return;
-    
-    // FIX: Use the custom property 'mediaStream' to access the stream for stopping tracks.
-    const stream = mediaRecorderRef.current.mediaStream; 
+
+    const stream = mediaRecorderRef.current.mediaStream;
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
     }
@@ -81,64 +79,55 @@ function CallPage() {
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      
-      // --- FIX: Robust MimeType Selection ---
-      let recordingMimeType = "audio/webm";
-      // Check for preferred WebM support
-      if (MediaRecorder.isTypeSupported("audio/webm")) {
+
+      let recordingMimeType = "audio/webm;codecs=opus";
+      if (!MediaRecorder.isTypeSupported(recordingMimeType)) {
         recordingMimeType = "audio/webm";
-      } 
-      // Fallback to MP4/M4A if WebM is not supported
-      else if (MediaRecorder.isTypeSupported("audio/mp4")) {
-        recordingMimeType = "audio/mp4";
-      }
-      // Last resort: find any supported mime type
-      else {
+      } else {
         const supportedTypes = [
-          "audio/ogg", 
-          "audio/wav", 
+          "audio/webm",
+          "audio/ogg",
+          "audio/wav",
           "audio/mpeg",
-          ...MediaRecorder.supportedTypes
         ];
-        const supported = supportedTypes.find(type => MediaRecorder.isTypeSupported(type));
+
+        const supported = supportedTypes.find((type) =>
+          MediaRecorder.isTypeSupported(type)
+        );
+
         if (supported) {
-            recordingMimeType = supported;
+          recordingMimeType = supported;
         } else {
-             // If no type is found, we can't record.
-             throw new Error("No supported audio recording formats found.");
+          throw new Error("No supported audio recording formats found.");
         }
       }
-      
+
       setMimeType(recordingMimeType);
-      
-      const recorder = new MediaRecorder(stream, { mimeType: recordingMimeType });
-      
+
+      const recorder = new MediaRecorder(stream, {
+        mimeType: recordingMimeType,
+      });
+
       mediaRecorderRef.current = recorder;
-      
-      // FIX: Store the stream under a non-conflicting name (mediaStream) 
-      // instead of 'stream' to avoid the TypeError.
-      mediaRecorderRef.current.mediaStream = stream; 
-      
+      mediaRecorderRef.current.mediaStream = stream;
       audioChunksRef.current = [];
 
       recorder.ondataavailable = handleDataAvailable;
-      // Ensure onRecordingStopped is correctly bound
-      recorder.onstop = onRecordingStopped; 
+      recorder.onstop = onRecordingStopped;
 
       recorder.start();
       setCallState(CALL_STATE.RECORDING);
       console.log(`Recording started with MIME type: ${recordingMimeType}`);
-      
     } catch (err) {
       console.error("Microphone access denied or error occurred:", err);
-      // Set the error message to be more informative
-      const errorMessage = err.name === 'NotAllowedError' 
-        ? "Microphone access denied by user or browser security policy." 
-        : err.message === "No supported audio recording formats found."
-        ? "Recording failed: Browser does not support necessary audio formats."
-        : `Recording failed: ${err.message || "Unknown hardware error."}`;
-      
-      dispatch(setError(errorMessage)); // Update Redux state with detail
+      const errorMessage =
+        err.name === "NotAllowedError"
+          ? "Microphone access denied by user or browser security policy."
+          : err.message === "No supported audio recording formats found."
+          ? "Recording failed: Browser does not support necessary audio formats."
+          : `Recording failed: ${err.message || "Unknown hardware error."}`;
+
+      dispatch(setError(errorMessage));
       setCallState(CALL_STATE.ERROR);
     }
   };

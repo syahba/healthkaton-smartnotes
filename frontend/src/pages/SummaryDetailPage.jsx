@@ -18,11 +18,11 @@ function SummaryDetailPage() {
 
   if (summaryDetail) {
     return (
-      <div className="h-full flex flex-col relative">
+      <div className="h-full flex flex-col relative overflow-auto">
         <Header text={"Ringkasan Panggilan"} isDetail={true}></Header>
   
         <Card data={summaryDetail} isDetail={true}></Card>
-        <div className="flex flex-col h-full pt-26 mx-8 gap-6">
+        <div className="flex flex-col h-full pt-32 mx-8 gap-3">
           <div className="text-[var(--neutral)] flex flex-col gap-2">
             <h1 className="heading">Ringkasan Percakapan</h1>
             <p className="paragraph text-justify">
@@ -33,10 +33,10 @@ function SummaryDetailPage() {
           <div className="flex flex-col">
             <div className="flex items-center justify-between">
               <h1 className="heading text-[var(--neutral)]">Tindak Lanjut</h1>
-              <p className="caption text-[var(--disabled)]">{summaryDetail.progress}% Selesai</p>
+              {/* <p className="caption text-[var(--disabled)]">{summaryDetail.progress}% Selesai</p> */}
             </div>
   
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
               {summaryDetail.steps.map(v => (
                 <Checklist data={v}></Checklist>
               ))}

@@ -52,27 +52,26 @@ const http = 'http://localhost:4000'
 export const uploadSummary = (audioBlob) => {
   return async (dispatch) => {
     dispatch(setLoading('pending'));
-    dispatch(setError(null));
 
     try {
       const formData = new FormData();
-      formData.append("audioFile", audioBlob, "call_recording.webm");
+      formData.append("audio", audioBlob, "call_recording.webm");
 
-      const response = await axios.post(`${http}/api/upload-and-process`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      const response = await axios.post(`${http}/api/summaries/`, formData, {
+        headers: { "Content-Type": "multipart/form-data" }
       });
-
-      const newSummary = response.data.data;
       
-      dispatch(setSummaryDetail(newSummary));
-      
+      dispatch(setSummaryDetail(response.data));
+      dispatch(setLoading('succeeded'));
       return newSummary;
-      
+
     } catch (error) {
       console.error("Upload Error:", error.response?.data || error.message);
-      const errorMessage = error.response?.data?.message || error.message || "Failed to upload and process summary.";
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to upload and process summary.";
+
       dispatch(setError(errorMessage));
     }
   };
@@ -120,12 +119,9 @@ export const updateStepStatus = (stepId) => {
     dispatch(setError(null));
     
     try {
-      const response = await axios.put(`${http}/api/steps/${stepId}/complete`);
-
-      const updatedSummary = response.data.summary;
+      const response = await axios.put(`${http}//api/summaries/${stepId}`);
       
-      dispatch(updateSummaryDetail(updatedSummary));
-      
+      dispatch(updateSummaryDetail(response.data));
     } catch (error) {
       console.error("Update Step Error:", error.response?.data || error.message);
       const errorMessage = error.response?.data?.message || error.message || "Failed to update step status.";

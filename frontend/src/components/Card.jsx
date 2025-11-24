@@ -3,6 +3,7 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faHeadset, faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import Button from "./Button";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../helpers/formatDate";
 
 function Card({ data, isDetail }) {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function Card({ data, isDetail }) {
         <p className="label text-[var(--neutral)] font-bold max-w-44">
           {data.topic}
         </p>
-        <p className="caption text-[var(--disabled)]">{data.datetime}</p>
+        <p className="caption text-[var(--disabled)]">{formatDate(data.createdAt)}</p>
       </div>
 
       <div className={isDetail ? 'flex justify-between items-end' : 'flex flex-col gap-4'}>
